@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.udacity.shoestore.login.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_onboardingFragment"
+            app:destination="@id/onboardingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.udacity.shoestore.onboarding.OnboardingFragment"
+        android:label="OnboardingFragment" >
+        <argument
+            android:name="kind"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_onboardingFragment_self"
+            app:destination="@id/onboardingFragment" />
+        <action
+            android:id="@+id/action_onboardingFragment_to_shoeListingFragment"
+            app:destination="@id/shoeListingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shoeListingFragment"
+        android:name="com.udacity.shoestore.shoeListing.ShoeListingFragment"
+        android:label="ShoeListingFragment" >
+        <action
+            android:id="@+id/action_shoeListingFragment_to_shoeDetailFragment"
+            app:destination="@id/shoeDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shoeDetailFragment"
+        android:name="com.udacity.shoestore.shoeDetail.ShoeDetailFragment"
+        android:label="ShoeDetailFragment" />
+</navigation>
