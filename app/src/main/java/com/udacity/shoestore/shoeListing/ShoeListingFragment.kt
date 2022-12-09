@@ -7,12 +7,22 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.udacity.shoestore.R
+import com.udacity.shoestore.ShoeStoreApplication
 import com.udacity.shoestore.databinding.ShoeListingFragmentBinding
+import com.udacity.shoestore.login.LoginFragmentDirections
+import com.udacity.shoestore.models.Shoe
+import com.udacity.shoestore.onboarding.OnboardingFragmentArgs
 import timber.log.Timber
 
 
@@ -35,26 +45,40 @@ class ShoeListingFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ShoeListingViewModel::class.java)
         binding.shoelistingViewModel = viewModel
 
-
+        val shoe = ShoeListingFragmentArgs.fromBundle(arguments!!).shoe
+        if(shoe.name.isNotEmpty()){
+            viewModel.shoeList.value!!.add(shoe)
+        }
+        binding.floatingActionButton.setOnClickListener {
+            showDetailShoe()
+        }
+        binding.logoutBtn.setOnClickListener {
+            logout()
+        }
+        val inflater = LayoutInflater.from(context)
         viewModel.shoeList.observe(viewLifecycleOwner, Observer { it ->
-
             it.forEach { shoe ->
-                val text = TextView(this.context)
-                text.setLayoutParams(
-                    LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                    )
-                )
-                Timber.i(shoe.name)
-                text.setText(shoe.name)
-                binding.listItem.addView(text)
+                val itemView = inflater.inflate(R.layout.list_item, null)
+                val shoeNameView = itemView.findViewById<TextView>(R.id.shoe_name)
+                val companyView = itemView.findViewById<TextView>(R.id.company_name)
+                shoeNameView.text = shoe.name
+                companyView.text = shoe.company
+                binding.listItem.addView(itemView)
             }
         })
-
-
-
         return binding.root
+    }
+
+
+    fun showDetailShoe(){
+        val action = ShoeListingFragmentDirections.actionShoeListingFragmentToShoeDetailFragment()
+        findNavController(this).navigate(action)
+    }
+    fun logout(){
+        val application = context!!.applicationContext as ShoeStoreApplication
+        application.loginCheck = false
+        val action = ShoeListingFragmentDirections.actionShoeListingFragmentToLoginFragment()
+        findNavController(this).navigate(action)
     }
 
 }

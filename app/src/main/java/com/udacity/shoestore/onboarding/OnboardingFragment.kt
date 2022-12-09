@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.udacity.shoestore.R
 import com.udacity.shoestore.databinding.OnboardingFragmentBinding
+import com.udacity.shoestore.models.Shoe
 
 class OnboardingFragment : Fragment() {
     private lateinit var viewModel: OnboardingViewModel
@@ -31,20 +32,20 @@ class OnboardingFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(OnboardingViewModel::class.java)
         binding.onboardingViewModel = viewModel
 
-        if(OnboardingFragmentArgs.fromBundle(arguments!!).kind == 0){
+        if (OnboardingFragmentArgs.fromBundle(arguments!!).kind == 0) {
             this.kind = 0
             binding.textView3.setText("WelCome")
-            binding.textView4.setText("WelComeWelComeWelComeWelCome")
+            binding.textView4.setText("WelCome WelCome WelCome WelCome")
             binding.button.setText("Instructions")
         } else {
             this.kind = 1
             binding.textView3.setText("Instructions")
-            binding.textView4.setText("InstructionsInstructionsInstructions")
+            binding.textView4.setText("Instructions Instructions Instructions")
             binding.button.setText("Next")
         }
 
         binding.button.setOnClickListener {
-            if(kind == 0){
+            if (kind == 0) {
                 goInstructions()
             } else {
                 goNext()
@@ -53,12 +54,18 @@ class OnboardingFragment : Fragment() {
         return binding.root
     }
 
-    fun goInstructions(){
+    fun goInstructions() {
         val action = OnboardingFragmentDirections.actionOnboardingFragmentSelf(1)
         NavHostFragment.findNavController(this).navigate(action)
     }
-    fun goNext(){
-        val action = OnboardingFragmentDirections.actionOnboardingFragmentToShoeListingFragment()
+
+    fun goNext() {
+        val action = OnboardingFragmentDirections.actionOnboardingFragmentToShoeListingFragment(
+            Shoe(
+                "", 0.0, "", "",
+                arrayListOf("")
+            )
+        )
         NavHostFragment.findNavController(this).navigate(action)
     }
 }

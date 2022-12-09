@@ -13,36 +13,21 @@ class LoginViewModel : ViewModel() {
         get() = _emptyCheck
 
 
-    private val _email = MutableLiveData<String>()
-    val email : LiveData<String>
-     get() = _email
-
-    private val _password = MutableLiveData<String>()
-    val password : LiveData<String>
-        get() = _password
+    val email = MutableLiveData<String>()
+    val password = MutableLiveData<String>()
 
     init {
-        _email.value = ""
-        _password.value = ""
+        email.value = ""
+        password.value = ""
         _emptyCheck.value = true
     }
 
     fun signIn(email : String , password : String){
-        if (email.isEmpty() || password.isEmpty()) {
-            _emptyCheck.value = true
-        } else {
-            _emptyCheck.value = false
-
-        }
+        _emptyCheck.value = email.isEmpty() || password.isEmpty()
     }
 
     fun login(email : String , password : String){
-        if (email.isEmpty() || password.isEmpty()) {
-            _emptyCheck.value = true
-        } else {
-            _emptyCheck.value = false
-            Timber.i("login $email , $password" )
-        }
+        _emptyCheck.value = email.isEmpty() || password.isEmpty()
     }
 
 }

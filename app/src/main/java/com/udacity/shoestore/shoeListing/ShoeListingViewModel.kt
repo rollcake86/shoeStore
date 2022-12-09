@@ -15,7 +15,7 @@ class ShoeListingViewModel : ViewModel() {
     init {
         _shoeList.value = ArrayList()
 
-        for (i: Int in 1..120) {
+        for (i: Int in 1..20) {
             val shoe = Shoe(
                 "aa$i",
                 240.0,

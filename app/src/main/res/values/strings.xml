@@ -5,4 +5,11 @@
     <string name="sign_in">Sign In</string>
     <string name="login">Login</string>
     <string name="shoe_list">shoe List</string>
+    <string name="cancel">cancel</string>
+    <string name="save">save</string>
+    <string name="images">images</string>
+    <string name="name">name</string>
+    <string name="shoe_size">Shoe Size</string>
+    <string name="company">Company</string>
+    <string name="description">description</string>
 </resources>

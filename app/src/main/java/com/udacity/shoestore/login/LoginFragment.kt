@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.udacity.shoestore.R
+import com.udacity.shoestore.ShoeStoreApplication
 import com.udacity.shoestore.databinding.LoginFragmentBinding
 import timber.log.Timber
 
@@ -34,12 +36,21 @@ class LoginFragment : Fragment()  {
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         binding.loginViewModel = viewModel
 
-        viewModel.emptyCheck.observe(viewLifecycleOwner , Observer { it ->
-//            if(it){
-//                Toast.makeText(this.context ,"Email&Password Empty!" , Toast.LENGTH_SHORT).show()
-//            } else {
+        binding.editTextTextEmailAddress.addTextChangedListener {
+            viewModel.email.postValue(it.toString())
+        }
+        binding.editTextTextPassword.addTextChangedListener {
+            viewModel.password.postValue(it.toString())
+        }
+
+        viewModel.emptyCheck.observe(viewLifecycleOwner , Observer {
+            if(it){
+                Toast.makeText(this.context ,"Email&Password Empty!" , Toast.LENGTH_SHORT).show()
+            } else {
+                val application = context!!.applicationContext as ShoeStoreApplication
+                application.loginCheck = true
                 nextStep()
-//            }
+            }
         })
         return binding.root
     }
