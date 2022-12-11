@@ -32,7 +32,6 @@ class ShoeDetailFragment : Fragment() {
         binding.shoedetailViewModel = viewModel
 
         binding.saveBtn.setOnClickListener {
-            if(binding.editTextTextSize.text.toString().isNotEmpty()){
                 saveShoe(
                     Shoe(
                         binding.editTextTextName.text.toString(),
@@ -42,7 +41,6 @@ class ShoeDetailFragment : Fragment() {
                         binding.editTextImages.text.toString().split(",")
                     )
                 )
-            }
         }
         binding.cancelBtn.setOnClickListener {
             backPress()

@@ -52,9 +52,6 @@ class ShoeListingFragment : Fragment() {
         binding.floatingActionButton.setOnClickListener {
             showDetailShoe()
         }
-        binding.logoutBtn.setOnClickListener {
-            logout()
-        }
         val inflater = LayoutInflater.from(context)
         viewModel.shoeList.observe(viewLifecycleOwner, Observer { it ->
             it.forEach { shoe ->
