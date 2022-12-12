@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,6 +24,7 @@ import com.udacity.shoestore.databinding.ShoeListingFragmentBinding
 import com.udacity.shoestore.login.LoginFragmentDirections
 import com.udacity.shoestore.models.Shoe
 import com.udacity.shoestore.onboarding.OnboardingFragmentArgs
+import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
 
@@ -45,6 +47,8 @@ class ShoeListingFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ShoeListingViewModel::class.java)
         binding.shoelistingViewModel = viewModel
 
+        activity!!.toolbar.addView(createLogoutBtn())
+
         val shoe = ShoeListingFragmentArgs.fromBundle(arguments!!).shoe
         if(shoe.name.isNotEmpty()){
             viewModel.shoeList.value!!.add(shoe)
@@ -53,19 +57,32 @@ class ShoeListingFragment : Fragment() {
             showDetailShoe()
         }
         val inflater = LayoutInflater.from(context)
-        viewModel.shoeList.observe(viewLifecycleOwner, Observer { it ->
-            it.forEach { shoe ->
-                val itemView = inflater.inflate(R.layout.list_item, null)
-                val shoeNameView = itemView.findViewById<TextView>(R.id.shoe_name)
-                val companyView = itemView.findViewById<TextView>(R.id.company_name)
-                shoeNameView.text = shoe.name
-                companyView.text = shoe.company
-                binding.listItem.addView(itemView)
-            }
-        })
+        viewModel.shoeList.value!!.forEach {
+            val itemView = inflater.inflate(R.layout.list_item, null)
+            val shoeNameView = itemView.findViewById<TextView>(R.id.shoe_name)
+            val companyView = itemView.findViewById<TextView>(R.id.company_name)
+            shoeNameView.text = it.name
+            companyView.text = it.company
+            binding.listItem.addView(itemView)
+        }
         return binding.root
     }
 
+    private fun createLogoutBtn(): View? {
+        val button = Button(context)
+        button.text = "logout"
+        val lp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT ,ViewGroup.LayoutParams.WRAP_CONTENT )
+        button.layoutParams = lp
+        button.setOnClickListener {
+            logout()
+        }
+        button.id = ViewCompat.generateViewId()
+        return button
+    }
+
+    private fun removeLogoutBtn(){
+        activity!!.toolbar.removeAllViews()
+    }
 
     fun showDetailShoe(){
         val action = ShoeListingFragmentDirections.actionShoeListingFragmentToShoeDetailFragment()
@@ -74,6 +91,7 @@ class ShoeListingFragment : Fragment() {
     fun logout(){
         val application = context!!.applicationContext as ShoeStoreApplication
         application.loginCheck = false
+        removeLogoutBtn()
         val action = ShoeListingFragmentDirections.actionShoeListingFragmentToLoginFragment()
         findNavController(this).navigate(action)
     }
